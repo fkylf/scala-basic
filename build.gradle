@@ -1,0 +1,227 @@
+plugins {
+//    id 'com.github.johnrengelman.shadow' version '1.2.3'
+    id 'java'
+    id 'scala'
+    id 'idea'
+//    id 'war'
+//    id 'application'
+}
+
+group 'com.horizonio'
+version '1.0-SNAPSHOT'
+//mainClassName = 'com.horizonio.swamp.spark.AppDemo'
+
+ext {
+//    akkaV = "2.4.8"
+    sprayV = "1.3.3"
+    scalaV = "2.10.4"
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+//jar {
+//    manifest {  //incubating版本，以后版本可能会改API
+//        attributes("Main-Class": "com.horizonio.swamp.slit.AppDemo",
+//                "Implementation-Title": "Gradle")
+//    }
+//}
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+//            url "https://plugins.gradle.org/m2/"
+//            url "http://repo.jfrog.org/artifactory/gradle-plugins/"
+            url 'libs'
+
+        }
+
+        jcenter()
+
+        maven {
+            url "http://repo.17usoft.com/content/groups/maven-all/"
+        }
+        maven {
+            url "http://172.16.58.7:8081/nexus/content/groups/wireless-public/"
+        }
+
+        maven { url 'http://maven.oschina.net/content/groups/public/' }
+
+        ivy { url 'http://dl.bintray.com/typesafe/ivy-releases/' }
+
+
+    }
+
+    sourceSets {
+        main {
+            scala {
+                srcDirs = ['src/main/scala', 'src/main/java']
+            }
+            java {
+                srcDirs = []
+            }
+        }
+        test {
+            scala {
+                srcDirs = ['src/test/scala', 'src/test/java']
+            }
+            java {
+                srcDirs = []
+            }
+        }
+    }
+}
+
+dependencies {
+    // 通用依赖
+    compile(
+//            "io.spray:spray-servlet_2.11:$sprayV",
+//            "io.spray:spray-routing_2.11:$sprayV",
+//            "com.typesafe.akka:akka-actor_2.11:$akkaV",
+            "org.scala-lang:scala-library:$scalaV"
+//            "io.spray:spray-servlet:akka-actor:$akkaV"
+    )
+
+    ext.jarTree = fileTree(dir: 'libs', include: '**/*.jar')
+    ext.rootProjectLibs = new File(rootProject.rootDir, 'libs').getAbsolutePath()
+    ext.jarTree += fileTree(dir: rootProjectLibs, include: '**/*.jar')
+
+    // 测试依赖
+    testCompile(
+//                "org.springframework:spring-test:$springVersion",
+            "junit:junit:4.11"
+    )
+}
+
+task createWebProject(dependsOn: 'createJavaProject') << {
+    def webAppDir = file("$webAppDirName")
+    webAppDir.mkdirs()
+}
+
+task createJavaProject << {
+    sourceSets*.java.srcDirs*.each { it.mkdirs() }
+    sourceSets*.scala.srcDirs*.each { it.mkdirs() }
+    sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
+
+//subprojects {
+//    apply plugin: 'java'
+//    apply plugin: 'idea'
+//
+//    version = '1.0'
+//
+//    // JVM 版本号要求
+//    sourceCompatibility = 1.8
+//    targetCompatibility = 1.8
+//
+//    // java编译的时候缺省状态下会因为中文字符而失败
+//    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+//
+//    repositories {
+//        mavenLocal()
+//        maven { url 'http://maven.oschina.net/content/groups/public/' }
+//        maven {
+//            url "https://plugins.gradle.org/m2/"
+//        }
+//        mavenCentral()
+//    }
+//
+//    sourceSets {
+//        main {
+//            scala {
+//                srcDirs = ['src/main/scala']
+//            }
+//            java {
+//                srcDirs = ['src/main/java']
+//            }
+//        }
+//        test {
+//            scala {
+//                srcDirs = ['src/test/scala']
+//            }
+//            java {
+//                srcDirs = ['src/test/java']
+//            }
+//        }
+//    }
+//
+//
+//    //定义版本号
+//    ext {
+//        springVersion = '3.2.11.RELEASE'
+//        hibernateVersion = '4.3.1.Final'
+//    }
+//
+//    jar {
+//        manifest {
+//            attributes("Implementation-Title": "Gradle")
+//        }
+//    }
+//
+//    configurations {
+//        // 所有需要忽略的包定义在此
+//        all*.exclude group: 'commons-httpclient'
+//        all*.exclude group: 'commons-logging'
+//        all*.exclude group: 'commons-beanutils', module: 'commons-beanutils'
+//    }
+//
+//    dependencies {
+//        // 通用依赖
+//        compile(
+//                "org.springframework:spring-context:$springVersion",
+//                "org.springframework:spring-orm:$springVersion",
+//                "org.springframework:spring-tx:$springVersion",
+//                "org.springframework.data:spring-data-jpa:1.5.2.RELEASE",
+//                "org.hibernate:hibernate-entitymanager:$hibernateVersion",
+//                "c3p0:c3p0:0.9.1.2",
+//                "mysql:mysql-connector-java:5.1.26",
+//                "org.slf4j:slf4j-nop:1.7.6",
+//                "commons-fileupload:commons-fileupload:1.3.1",
+//                "com.fasterxml.jackson.core:jackson-databind:2.3.1"
+//        )
+//
+//        // 依赖maven中不存在的jar
+////        ext.jarTree = fileTree(dir: 'libs', include: '**/*.jar')
+////        ext.rootProjectLibs = new File(rootProject.rootDir, 'libs').getAbsolutePath()
+////        ext.jarTree += fileTree(dir: rootProjectLibs, include: '**/*.jar')
+//
+//
+////        compile jarTree
+//
+//        // 测试依赖
+//        testCompile(
+////                "org.springframework:spring-test:$springVersion",
+//                "junit:junit:4.11"
+//        )
+//    }
+//
+//    // 显示当前项目下所有用于 compile 的 jar.
+//    task listJars(description: 'Display all compile jars.') << {
+//        configurations.compile.each { File file -> println file.name }
+//    }
+//
+//    task copy(type: Copy) {
+//        print 'Copies the resource directory to the target directory'
+//        description 'Copies the resource directory to the target directory.'
+//        from 'core/build/libs'
+//        into 'target'
+//        include('**/*.txt', '**/*.xml', '**/*.properties')
+//    }
+//
+//
+//    task myCopy(type: Copy) {
+//
+//        print 'hello world'
+//        copy{
+//            from('core/build/libs') {
+//                include('*')
+//            }
+//
+//            into('target')
+//        }
+//    }
+//
+//}

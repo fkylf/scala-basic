@@ -1,0 +1,63 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+    id 'java'
+    id 'scala'
+    id 'idea'
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+ext {
+    sparkV = "1.4.0"
+    hadoopV = "2.5.0-cdh5.2.0"
+    scalaBinaryV = "2.10"
+    scalaV = "2.10.4"
+}
+def env = System.getProperty("env") ?: "prod"
+apply from: "profile-${env}.gradle"
+
+configurations {
+    shadow
+//    provided
+//    provided.extendsFrom(compile)
+}
+
+group 'com.horizonio'
+version = '1.0.0'
+
+// java编译的时候缺省状态下会因为中文字符而失败
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+//mainClassName='com.horizonio.swamp.spark.searchA.PcEventSearchParse'
+
+//jar {
+//    manifest {  //incubating版本，以后版本可能会改API
+//        attributes("Main-Class": "com.horizonio.swamp.spark.searchA.PcEventSearchParse",
+//                "Implementation-Title": "Gradle")
+//    }
+//}
+
+shadowJar {
+    zip64 = 'true'
+    baseName = 'shadow'
+    classifier = 'spark-wxPush'
+    version = "1.0.1"
+}
+
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/resources", "src/main/profile/$env"]
+        }
+    }
+    test {
+        resources {
+            srcDirs = ["src/main/resources", "src/main/profile/$env"]
+        }
+    }
+}
+
+
+

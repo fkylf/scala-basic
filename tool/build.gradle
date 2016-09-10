@@ -1,0 +1,31 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'scala'
+
+version = '1.0'
+
+// JVM 版本号要求
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+    // 通用依赖
+    compile(
+            "org.scala-lang:scala-library:$scalaV",
+            "joda-time:joda-time:2.9.4",
+            "com.typesafe:config:1.2.1"
+    )
+
+    // 依赖maven中不存在的jar
+//        ext.jarTree = fileTree(dir: 'libs', include: '**/*.jar')
+//        ext.rootProjectLibs = new File(rootProject.rootDir, 'libs').getAbsolutePath()
+//        ext.jarTree += fileTree(dir: rootProjectLibs, include: '**/*.jar')
+
+    // 测试依赖
+    testCompile(
+            "junit:junit:4.11"
+    )
+}
+
+
+

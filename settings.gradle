@@ -1,0 +1,13 @@
+rootProject.name = "horizon-scala"
+
+
+include "core"
+include "tool"
+include "test"
+include "basic"
+
+
+
+// Exposes gradle buildSrc for IDE support
+//include "buildSrc"
+//rootProject.children.find{ it.name == "buildSrc" }.name = "spring-build-src"

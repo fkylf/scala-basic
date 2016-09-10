@@ -1,0 +1,25 @@
+dependencies {
+
+    // 通用依赖
+    compile "org.scala-lang:scala-library:$scalaV"
+
+    shadow(
+            "joda-time:joda-time:2.9.4",
+//            "org.scala-lang:scala-library:$scalaV",
+            "org.apache.spark:spark-core_$scalaBinaryV:$sparkV",
+            "org.apache.spark:spark-hive_$scalaBinaryV:$sparkV",
+            "org.apache.spark:spark-sql_$scalaBinaryV:$sparkV",
+            "org.apache.kafka:kafka_2.9.2:0.8.2.0"
+    )
+
+    // 测试依赖
+    testCompile(
+            "junit:junit:4.11"
+    )
+
+    sourceSets.main.compileClasspath += configurations.shadow
+    sourceSets.main.runtimeClasspath += configurations.shadow
+    sourceSets.test.compileClasspath += configurations.shadow
+    sourceSets.test.runtimeClasspath += configurations.shadow
+
+}

@@ -1,0 +1,35 @@
+dependencies {
+    compile project(":core")
+    compile project(":tool")
+    compile "joda-time:joda-time:2.9.4"
+    compile "org.scala-lang:scala-library:$scalaV"
+
+    compile "com.microsoft.sqlserver:sqljdbc4:4.0"
+    compile "com.alibaba:fastjson:1.2.16"
+//    compile("org.apache.kafka:kafka_2.9.2:0.8.2.0")
+    compile "org.apache.spark:spark-streaming-kafka_2.10:1.4.0"
+//            {
+//        exclude group: 'org.jboss.netty', module: 'netty'
+//    }
+    compile("org.apache.spark:spark-sql_$scalaBinaryV:$sparkV")
+//            {
+//        exclude group: 'org.jboss.netty', module: 'netty'
+//    }
+
+    compile("org.apache.spark:spark-core_$scalaBinaryV:$sparkV")
+
+//    compile "org.apache.commons:commons-lang3:3.3.2"
+//    compile "commons-collections:commons-collections:3.2.1"
+
+    // 测试依赖
+    testCompile(
+//                "org.springframework:spring-test:$springVersion",
+            "junit:junit:4.11"
+    )
+
+
+    sourceSets.main.compileClasspath += configurations.shadow
+    sourceSets.main.runtimeClasspath += configurations.shadow
+    sourceSets.test.compileClasspath += configurations.shadow
+    sourceSets.test.runtimeClasspath += configurations.shadow
+}
